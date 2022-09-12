@@ -1,3 +1,4 @@
+from copy import deepcopy
 import numpy as np
 
 ### FUNCTIONS ### 
@@ -11,52 +12,40 @@ def update_wallmat_Robotpos():
 
 
 def breadth_first_search(): 
-    #while len(fringe) != 0: # While loop that will continue as long as fringe/next nodes to examine is not 0
 
-        #node = fringe[0]
-    for n in range(2):
-        n += 1
+    wavemat[fringe[0][0], fringe[0][1]] = 1 # Set starting position to 1
 
-        if wallmat[fringe[0][0],fringe[0][1]] == 0:
-            # update the wavemat with an increasing value
-            print('It is working - 0')
-        
-        elif wallmat[fringe[0][0],fringe[0][1]] == -1:
-            # Wall
-            print('It is working - -1')
-
-        elif wallmat[fringe[0][0],fringe[0][1]] == 3:
-            # Goal/Endpoint
-            print('It is working - 3')
-        
-        else:
-            # Weird number in Wallmat print number and position and break while loop
-            print('It is working - Wrong number: ', wallmat[fringe[0][0],fringe[0][1]])
-
+    while len(fringe) != 0: # While loop that will continue as long as fringe/next nodes to examine is not 0
 
         # add to wave's fringe, into an array of its indices
         # pushes out wave fringe and removes old visited indices
         # Find children function
         if wallmat[fringe[0][0]+1, fringe[0][1]] == 0 and wavemat[fringe[0][0]+1, fringe[0][1]] == 0:
             fringe.append([fringe[0][0]+1, fringe[0][1]])
+            wavemat[fringe[0][0]+1, fringe[0][1]] = wavemat[fringe[0][0], fringe[0][1]] + 1
+           
         if wallmat[fringe[0][0]-1, fringe[0][1]] == 0 and wavemat[fringe[0][0]-1, fringe[0][1]] == 0:
             fringe.append([fringe[0][0]-1, fringe[0][1]])
+            wavemat[fringe[0][0]-1, fringe[0][1]] = wavemat[fringe[0][0], fringe[0][1]] + 1
+            
         if wallmat[fringe[0][0], fringe[0][1]+1] == 0 and wavemat[fringe[0][0], fringe[0][1]+1] == 0:
             fringe.append([fringe[0][0], fringe[0][1]+1])
+            wavemat[fringe[0][0], fringe[0][1]+1] = wavemat[fringe[0][0], fringe[0][1]] + 1
+            
         if wallmat[fringe[0][0], fringe[0][1]-1] == 0 and wavemat[fringe[0][0], fringe[0][1]-1] == 0:
             fringe.append([fringe[0][0], fringe[0][1]-1])
-        
-        
+            wavemat[fringe[0][0], fringe[0][1]-1] = wavemat[fringe[0][0], fringe[0][1]] + 1
+           
+
         visited.insert(0, fringe[0])
         fringe.remove(visited[0])
 
-        print(fringe)
+        print('fringe = \n', fringe)
         print('\n')
-        print(wallmat)
+        print('walmat = \n', wallmat)
         print('\n')
-
-
-
+        print('wavemat = \n', wavemat)
+        print('\n')
 
 
 
@@ -64,9 +53,7 @@ def breadth_first_search():
 # Wall matrix and wave matrix
 wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1], [-1, -1, -1, -1, -1, -1]])
 wavemat = np.zeros((6,6))
-
-print(wallmat)
-print(wavemat)
+wavemat = np.copy(wallmat) # DOES NOT MAKE WAVEMAT A POINTER!
 
 
 ### Robot variables ###
@@ -83,6 +70,7 @@ robotPos[1] = Rstartpos[1]
 fringe = [Rstartpos]  
 # Visited - contains the nodes already visited
 visited = []
+
 
 
 # Call search function
