@@ -1,0 +1,18 @@
+import numpy as np
+
+#set the size of the playable matrix
+rows = 4
+columns = 4
+
+#create a matrix of the specified size then fill with -1's
+maze = np.zeros((rows, columns))
+maze.fill(-1)
+print(maze)
+
+#pick a start point denoted by 2
+
+
+#pick an end point denoted by 3
+
+
+#add padding around the matrix (-1's)
