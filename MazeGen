@@ -27,6 +27,7 @@ for indexr, row in enumerate(maze):
     for indexc, num in enumerate(row):
         if num == 2 or num == 0:
             B = [indexr, indexc]
+            print("B:",B)
             north = [indexr+1, indexc]
             south = [indexr-1, indexc]
             east = [indexr, indexc+1]
@@ -45,40 +46,64 @@ for indexr, row in enumerate(maze):
                 if dir == -1 and x == 3:
                     walls.append(west)
                 
-            print(walls)
-print(indexr)
+            print("walls:",walls)
+
 
 #randomly pick C from walls
 walllen = len(walls)
-C = walls[random.randint(0,walllen-1)]
-print(C)
+CinWall =random.randint(0,walllen-1)
+C = walls[CinWall]
+print("C:",C)
 
 #find A from C
 findA = (np.subtract(B,C))
-print(findA)
-print(findA[0])
-print(findA[1])
-print(indexr,indexc)
-print(B)
+
 if findA[0] != 0:
     if findA[0] < 0:
         #south
         A = [B[0]+2, B[1]]
-        print(A)
+        print("A:",A)
     else:
         #north
         A = [B[0]-2, B[1]]
-        print(A)
+        print("A:",A)
 if findA[1] != 0:
     if findA[1] < 0:
         #east
         A = [B[0], B[1]+2]
-        print(A)
+        print("A:",A)
     else:
         #west
         A = [B[0], B[1]-2]
-        print(A)
-print(A)
+        print("A:",A)
+
+#check for 2 or more free cells around A
+#if there are 2 or more then remove C from walls 
+#if there are not 2 or more then open A and C
+potfree = [A, C]
+print(potfree)
+remWall = 0
+for spot in potfree:
+    numfree = 0
+    LoNorth = [spot[0]+1, spot[1]]
+    LoSouth = [spot[0]-1, spot[1]]
+    LoEast = [spot[0], spot[1]+1]
+    LoWest = [spot[0], spot[1]-1]
+    check = [maze[LoNorth[0],LoNorth[1]], maze[LoSouth[0], LoSouth[1]], maze[LoEast[0], LoEast[1]], maze[LoWest[0], LoWest[1]]]
+    for spot in check:
+        if spot == 0 or spot ==2:
+            numfree +=1
+    if numfree > 1:
+        walls.remove(walls[CinWall])
+        print(walls)
+    elif numfree < 2:
+        remWall +=1
+if remWall == 2:
+    maze[A[0],A[1]] = 0
+    maze[C[0], C[1]] = 0
+
+print(maze)
+
 
 
 
