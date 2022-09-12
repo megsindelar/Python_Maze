@@ -7,10 +7,15 @@ def update_wallmat_Robotpos():
     wallmat[robotPos[0],robotPos[1]] = robotVal # Update wall matrix to display robot current pos
 
 
+
+
+
 def breadth_first_search(): 
-    while len(fringe) != 0: # While loop that will continue as long as fringe/next nodes to examine is not 0
+    #while len(fringe) != 0: # While loop that will continue as long as fringe/next nodes to examine is not 0
 
         #node = fringe[0]
+    for n in range(2):
+        n += 1
 
         if wallmat[fringe[0][0],fringe[0][1]] == 0:
             # update the wavemat with an increasing value
@@ -29,10 +34,26 @@ def breadth_first_search():
             print('It is working - Wrong number: ', wallmat[fringe[0][0],fringe[0][1]])
 
 
+        # add to wave's fringe, into an array of its indices
+        # pushes out wave fringe and removes old visited indices
+        # Find children function
+        if wallmat[fringe[0][0]+1, fringe[0][1]] == 0 and wavemat[fringe[0][0]+1, fringe[0][1]] == 0:
+            fringe.append([fringe[0][0]+1, fringe[0][1]])
+        if wallmat[fringe[0][0]-1, fringe[0][1]] == 0 and wavemat[fringe[0][0]-1, fringe[0][1]] == 0:
+            fringe.append([fringe[0][0]-1, fringe[0][1]])
+        if wallmat[fringe[0][0], fringe[0][1]+1] == 0 and wavemat[fringe[0][0], fringe[0][1]+1] == 0:
+            fringe.append([fringe[0][0], fringe[0][1]+1])
+        if wallmat[fringe[0][0], fringe[0][1]-1] == 0 and wavemat[fringe[0][0], fringe[0][1]-1] == 0:
+            fringe.append([fringe[0][0], fringe[0][1]-1])
+        
+        
+        visited.insert(0, fringe[0])
+        fringe.remove(visited[0])
 
-
-
+        print(fringe)
+        print('\n')
         print(wallmat)
+        print('\n')
 
 
 
@@ -59,23 +80,9 @@ robotPos[1] = Rstartpos[1]
 
 ### Algorithm variables ###
 # Fringe - Contains robot start position at the beginning then after that it has the next nodes to be visited
-fringe = [robotPos]  
+fringe = [Rstartpos]  
 # Visited - contains the nodes already visited
 visited = []
-
-
-print(fringe)
-
-# add to wave's fringe, into an array of its indices
-# pushes out wave fringe and removes old visited indices
-fringe.append([robotPos[0]+1, robotPos[1]])
-fringe.append([robotPos[0]-1, robotPos[1]])
-fringe.append([robotPos[0], robotPos[1]+1])
-fringe.append([robotPos[0], robotPos[1]-1])
-visited.insert(0, fringe[0])
-fringe.remove(visited[0])
-
-print(fringe)
 
 
 # Call search function
