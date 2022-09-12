@@ -2,13 +2,40 @@ import numpy as np
 
 ### FUNCTIONS ### 
 
-def update_wallmat():
+def update_wallmat_Robotpos():
 
     wallmat[robotPos[0],robotPos[1]] = robotVal # Update wall matrix to display robot current pos
 
 
-def breadth_first_search():
-    
+def breadth_first_search(): 
+    while len(fringe) != 0: # While loop that will continue as long as fringe/next nodes to examine is not 0
+
+        #node = fringe[0]
+
+        if wallmat[fringe[0][0],fringe[0][1]] == 0:
+            # update the wavemat with an increasing value
+            print('It is working - 0')
+        
+        elif wallmat[fringe[0][0],fringe[0][1]] == -1:
+            # Wall
+            print('It is working - -1')
+
+        elif wallmat[fringe[0][0],fringe[0][1]] == 3:
+            # Goal/Endpoint
+            print('It is working - 3')
+        
+        else:
+            # Weird number in Wallmat print number and position and break while loop
+            print('It is working - Wrong number: ', wallmat[fringe[0][0],fringe[0][1]])
+
+
+
+
+
+        print(wallmat)
+
+
+
 
 
 
@@ -28,7 +55,6 @@ robotPos = [0,0] # Holds robot position
 # Update Robot start pos
 robotPos[0] = Rstartpos[0]
 robotPos[1] = Rstartpos[1]
->>>>>>> 6d9f747 (Added Robot variables and robot position update)
 
 
 ### Algorithm variables ###
@@ -37,8 +63,8 @@ fringe = [robotPos]
 # Visited - contains the nodes already visited
 visited = []
 
+
 print(fringe)
->>>>>>> 6d9f747 (Added Robot variables and robot position update)
 
 # add to wave's fringe, into an array of its indices
 # pushes out wave fringe and removes old visited indices
@@ -51,3 +77,6 @@ fringe.remove(visited[0])
 
 print(fringe)
 
+
+# Call search function
+breadth_first_search() 
