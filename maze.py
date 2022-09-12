@@ -1,7 +1,7 @@
 import numpy as np
 
-wallmat = np.array([[0, 0, 0, -1], [-1, 0, -1, -1], [0, 0, 0, 0], [0, -1, 0, 0]])
-wavemat = np.zeros((4,4))
+wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1]])
+wavemat = np.zeros((6,6))
 print(wavemat)
 
 #robotpos = wallmat[0, 0]
