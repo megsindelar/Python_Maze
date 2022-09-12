@@ -1,5 +1,6 @@
 from cgitb import small
 from operator import ne
+from shutil import move
 from tabnanny import check
 import wave
 import numpy as np
@@ -36,6 +37,8 @@ m = 0
 
 """Find shortest path"""
 def shortest_path():
+
+    m = 0
 
     """Directions robot can move"""
     north = robot_move[(i+1), i]
@@ -87,53 +90,81 @@ def shortest_path():
             """Check if robot is next to the goal (3 represents goal)"""
             list_index = lst_str.index("3")
             move_robot(list_index)
+            print("Reached goal!")
 
         elif (smallest_num[0] == -1):
             """Check if robot is next to a wall (-1 represents a wall)"""
             check_wall = smallest_num[1]
             i = 1
             while check_wall == -1:
-                check_wall = smallest_num[i+1]
                 i+=1
+                check_wall = smallest_num[i]
                 if(i == 3) & (check_wall == -1):
                     print("Boxed in! No way out!")
                     break
-            last_val = check_wall
+            next_val = check_wall
 
             if (l == 0):
-                for i in lst_str:
-                    if check_wall in lst_str:
+                for i in lst:
+                    if check_wall in lst:
                         next_ind = []
-                        next_ind = next_ind.append(lst_str.index(check_wall))
+                        next_ind = next_ind.append(lst.index(check_wall))
                         len = len(next_ind)
-
+            
             """Checking if multiple of the same smallest cell values"""
             if (len>1) & (l == 0):
                 move_robot(next_ind[m])
-                m+1
-                l += 1
-                pos_vals_rob(l)
+                m+=1
+                l+=1
                 len -= 1
+                last_val = check_wall
+                pos_vals_rob(l)
             elif (len>1) & (l>0) & (next_val > last_val):
                 reverse_robot(next_ind[m-1])
                 move_robot(next_ind[m])
-                len -= 1
-                m+1
-                l += 1
+                len-=1
+                m+=1
+                l+=1
+                last_val = check_wall
                 pos_vals_rob(l)
             else:
                 move_robot(next_ind[0])
-        
+
         
         else:
             """If smallest value is not a wall or robot is not next to the goal, then move to the smallest value cell"""
-
+            check_wall = smallest_num[0]
+            rob_ind = lst.index(check_wall)
+            move_robot(rob_ind)
+            next_val = check_wall
 
             """Checking if there are multiple of the same smallest value"""
-            for i in smallest:
-                if i not in 
+            if (l == 0):
+                for i in lst:
+                    if check_wall in lst:
+                        next_ind = []
+                        next_ind = next_ind.append(lst.index(check_wall))
+                        len = len(next_ind)
+            
+            if (len>1) & (l == 0):
+                move_robot(next_ind[m])
+                m+=1
+                l+=1
+                last_val = check_wall
+                len-=1
+                pos_vals_rob(l)
+            elif (len>1) & (l>0) & (next_val>last_val):
+                reverse_robot(next_ind[m-1])
+                move_robot(next_ind[m])
+                len-=1
+                m+=1
+                l+=1
+                last_val = check_wall
+                pos_vals_rob(l)
+            else:
+                move_robot(next_ind[0])
 
-            robotpos
+            
 
 
 
