@@ -10,35 +10,45 @@ columns = 4
 maze = np.zeros((rows, columns))
 maze.fill(-1)
 
-
 #pick a start point denoted by 2
 startc = random.randint(0,columns-1)
-print(startc)
 maze[0,startc] = 2
 
+#add padding around the maze :)
 maze = np.pad(maze, pad_width=1, mode='constant', constant_values=-2)
 print(maze)
+
 #generate maze path
 #identify walls cells
 walls = []
-print(walls)
 
-# for indexr, row in enumerate(maze): 
-#     for indexc, num in enumerate(row):
-#         if num == 2 or num == 0:
-#             print(maze[indexr, indexc])
-#             north = maze[indexr+1, indexc]
-#             south = maze[indexr-1, indexc]
-#             east = maze[indexr, indexc+1]
-#             west = maze[indexr, indexc-1]
-#             neighbors = [north, south, east, west]
-#             for dir in neighbors:
-#                 if dir == -1:
+for indexr, row in enumerate(maze): 
+    for indexc, num in enumerate(row):
+        if num == 2 or num == 0:
+            B = [indexr, indexc]
+            north = [indexr+1, indexc]
+            south = [indexr-1, indexc]
+            east = [indexr, indexc+1]
+            west = [indexr, indexc-1]
+            print(north)
+            directions = [north, south, east, west]
+            neighbors = [maze[north[0],north[1]], maze[south[0], south[1]], maze[east[0], east[1]], maze[west[0], west[1]]]
+            print(neighbors)
+            for x, dir in enumerate(neighbors):
+                if dir == -1 and x == 0:
+                    walls.append(north)
+                if dir == -1 and x == 1:
+                    walls.append(south)
+                if dir == -1 and x == 2:
+                    walls.append(east)
+                if dir == -1 and x == 3:
+                    walls.append(west)
+                print(walls)
+
+
 
 #             if maze[indexr+1, indexc] == -1:
-#                 for i in range(len(north)):
-#                     walls.insert(i, north[i])
-#                     print(walls)
+
 #             if maze[indexr-1, indexc] == -1:
                 
 #                 for i in range(len(north)):
@@ -79,5 +89,3 @@ print(walls)
 
 #pick an end point denoted by 3
 #endc = random.randint(0,columns)
-
-##add padding around the matrix (-1's)
