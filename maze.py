@@ -9,6 +9,18 @@ def update_wallmat_Robotpos():
 
 
 
+def displayMatrix():
+
+        #print('fringe = \n', fringe)
+        #print('\n')
+        #print('walmat = \n', wallmat)
+        #print('\n')
+        print('wavemat = \n', wavemat)
+        print('\n')
+
+
+
+
 
 
 def breadth_first_search(): 
@@ -40,12 +52,8 @@ def breadth_first_search():
         visited.insert(0, fringe[0])
         fringe.remove(visited[0])
 
-        print('fringe = \n', fringe)
-        print('\n')
-        print('walmat = \n', wallmat)
-        print('\n')
-        print('wavemat = \n', wavemat)
-        print('\n')
+        displayMatrix()
+
 
 
 
