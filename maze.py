@@ -39,8 +39,9 @@ def shortest_path():
     m = 0
 
     """Place robot at start"""
-    #robotpos = start
-    #i,j = index.start[i,j]
+    #robotpos = [0,startc]
+    #i = 0
+    #j = startc
 
     """Directions robot can move"""
     north = robot_move[(i+1), j]
@@ -115,10 +116,12 @@ def shortest_path():
             next_val = check_wall
 
             if (l == 0):
+                next_ind = []
+                index_pos = 0
                 for i in lst:
                     if check_wall in lst:
-                        next_ind = []
-                        next_ind = next_ind.append(lst.index(check_wall))
+                        next_index = lst.index(check_wall, index_pos)
+                        next_ind.append(next_index)
                         len = len(next_ind)
             
             """Checking if multiple of the same smallest cell values"""
@@ -149,10 +152,12 @@ def shortest_path():
 
             """Checking if there are multiple of the same smallest value"""
             if (l == 0):
+                next_ind = []
+                index_pos = 0
                 for i in lst:
                     if check_wall in lst:
-                        next_ind = []
-                        next_ind = next_ind.append(lst.index(check_wall))
+                        next_index = lst.index(check_wall, index_pos)
+                        next_ind.append(next_index)
                         len = len(next_ind)
             
             if (len>1) & (l == 0):
