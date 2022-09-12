@@ -33,23 +33,20 @@ import numpy as np
 #backtracking - Meg
 ###################################################
 
-robot_move = wavemat
-
-"""Place robot at start"""
-robotpos = start
-
-m = 0
-
 """Find shortest path"""
 def shortest_path():
-
+    robot_move = wavemat
     m = 0
 
+    """Place robot at start"""
+    #robotpos = start
+    #i,j = index.start[i,j]
+
     """Directions robot can move"""
-    north = robot_move[(i+1), i]
-    east = robot_move[i, (i+1)]
-    south = robot_move[(i-1), i]
-    west = robot_move[i, (i-1)]
+    north = robot_move[(i+1), j]
+    east = robot_move[i, (j+1)]
+    south = robot_move[(i-1), j]
+    west = robot_move[i, (j-1)]
 
 
     """Finding the smallest numeric value for robot path"""
@@ -63,30 +60,38 @@ def shortest_path():
     def move_robot(ind):
         if ind == 0:
             """Robot position movement north"""
-            robotpos = wavemat[(i+1),i]
+            robotpos = wavemat[(i+1),j]
+            i+=1
         elif ind == 1:
             """Robot position movement east"""
-            robotpos = wavemat[i,(i+1)]
+            robotpos = wavemat[i,(j+1)]
+            j+=1
         elif ind == 2:
             """Robot position movement south"""
-            robotpos = wavemat[(i-1), i]
+            robotpos = wavemat[(i-1), j]
+            i-=1
         else:
             """Robot position movement west"""
-            robotpos = wavemat[i, (i-1)]
+            robotpos = wavemat[i, (j-1)]
+            j-=1
 
     def reverse_robot(ind):
         if ind == 0:
             """Reverse robot position movement from north"""
-            robotpos = wavemat[(i-1),i]
+            robotpos = wavemat[(i-1),j]
+            i-=1
         elif ind == 1:
             """Reverse robot position movement from east"""
-            robotpos = wavemat[i,(i-1)]
+            robotpos = wavemat[i,(j-1)]
+            j-=1
         elif ind == 2:
             """Reverse robot position movement from south"""
-            robotpos = wavemat[(i+1), i]
+            robotpos = wavemat[(i+1), j]
+            i+=1
         else:
             """Reverse robot position movement from west"""
-            robotpos = wavemat[i, (i+1)]
+            robotpos = wavemat[i, (j+1)]
+            j+=1
 
     
     def pos_vals_rob(l):
@@ -134,7 +139,6 @@ def shortest_path():
                 pos_vals_rob(l)
             else:
                 move_robot(next_ind[0])
-
         
         else:
             """If smallest value is not a wall or robot is not next to the goal, then move to the smallest value cell"""
