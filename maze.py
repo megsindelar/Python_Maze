@@ -1,22 +1,26 @@
 import numpy as np
 
-wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1]])
+# make matrix
+
+wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1], [-1, -1, -1, -1, -1, -1,]])
 wavemat = np.zeros((6,6))
-print(wavemat)
 
-#robotpos = wallmat[0, 0]
-#robotpos = 2
+# initialize variables
 
-#print(wavemat)
+i=4
+j=4
 
-robotpos = [0,0]
-robotval = 7
+fringe = [[i,j]]
+visited = []
 
-wallmat[robotpos[0],robotpos[1]] = robotval
-print(wallmat)
+# add to wave's fringe, into an array of its indices
+# pushes out wave fringe and removes old visited indices
 
+fringe.append([i+1, j])
+fringe.append([i-1, j])
+fringe.append([i, j+1])
+fringe.append([i, j-1])
+visited.insert(0, fringe[0])
+fringe.remove(visited[0])
 
-
-
-
-
+print(fringe)
