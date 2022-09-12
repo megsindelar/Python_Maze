@@ -22,6 +22,7 @@ print(maze)
 #identify walls cells
 walls = []
 
+#look for a 0 or a 2 to find walls
 for indexr, row in enumerate(maze): 
     for indexc, num in enumerate(row):
         if num == 2 or num == 0:
@@ -30,10 +31,10 @@ for indexr, row in enumerate(maze):
             south = [indexr-1, indexc]
             east = [indexr, indexc+1]
             west = [indexr, indexc-1]
-            print(north)
+            cardinal = ''
             directions = [north, south, east, west]
             neighbors = [maze[north[0],north[1]], maze[south[0], south[1]], maze[east[0], east[1]], maze[west[0], west[1]]]
-            print(neighbors)
+            #add all of the surround cells to walls
             for x, dir in enumerate(neighbors):
                 if dir == -1 and x == 0:
                     walls.append(north)
@@ -43,45 +44,41 @@ for indexr, row in enumerate(maze):
                     walls.append(east)
                 if dir == -1 and x == 3:
                     walls.append(west)
-                print(walls)
-
-
-
-#             if maze[indexr+1, indexc] == -1:
-
-#             if maze[indexr-1, indexc] == -1:
                 
-#                 for i in range(len(north)):
-#                     walls.insert(i, north[i])
-#                     print(walls)
-#             if maze[indexr+1, indexc+1] == -1:
-                
-#                 for i in range(len(north)):
-#                     walls.insert(i, north[i])
-#                     print(walls)
-#             if maze[indexr+1, indexc-1] == -1:
-                
-#                 for i in range(len(north)):
-#                     walls.insert(i, north[i])
-#                     print(walls)
+            print(walls)
+print(indexr)
 
-            #if maze[indexr+2, indexc] == -1:
-                #B = [indexr+2, indexc]
-                #print(maze[B])
-                #rontier = frontier.append(place)
-                #rint(frontier)
+#randomly pick C from walls
+walllen = len(walls)
+C = walls[random.randint(0,walllen-1)]
+print(C)
 
-
-            
-
-#remove poser frontier cells
-
-
-#ramdonly pick a frontier cell
-
-
-#make chosen cell into a passage and 
-#connect new passage with old passage
+#find A from C
+findA = (np.subtract(B,C))
+print(findA)
+print(findA[0])
+print(findA[1])
+print(indexr,indexc)
+print(B)
+if findA[0] != 0:
+    if findA[0] < 0:
+        #south
+        A = [B[0]+2, B[1]]
+        print(A)
+    else:
+        #north
+        A = [B[0]-2, B[1]]
+        print(A)
+if findA[1] != 0:
+    if findA[1] < 0:
+        #east
+        A = [B[0], B[1]+2]
+        print(A)
+    else:
+        #west
+        A = [B[0], B[1]-2]
+        print(A)
+print(A)
 
 
 
