@@ -1,4 +1,6 @@
+from asyncio import start_server
 import numpy as np
+import random
 
 #set the size of the playable matrix
 rows = 4
@@ -10,9 +12,13 @@ maze.fill(-1)
 print(maze)
 
 #pick a start point denoted by 2
+startc = random.randint(0,columns-1)
+maze[0,startc] = 2
+print(maze)
 
+#generate maze path
 
 #pick an end point denoted by 3
-
+#endc = random.randint(0,columns)
 
 #add padding around the matrix (-1's)
