@@ -12,7 +12,6 @@ maze.fill(-1)
 
 #add padding around the maze :)
 maze = np.pad(maze, pad_width=1, mode='constant', constant_values=-2)
-print(maze)
 
 walls = []
 
@@ -22,12 +21,10 @@ for indexr, row in enumerate(maze):
             if maze[indexr, indexc] != -2:
                 wall = [indexr, indexc]
                 walls.append(wall)
-print(walls)
 
 #pick B from random index in walls and set to 0
 B = random.randint(0,len(walls)-1)
 setB = walls[B]
-print(setB[0])
 maze[setB[0], setB[1]] = 0
 print(maze)
 
@@ -97,11 +94,12 @@ if 'fwest' in fdirections:
         walls.append(west)
 
 
-print(walls)
+print('walls!',walls)
     
 
 while len(walls)>0:
     numfree = 2
+    print("hi", walls)
     while numfree > 1:
         #pick C randomly from the list of walls
         C = random.randint(0,len(walls)-1)
@@ -182,11 +180,15 @@ while len(walls)>0:
                 #to find a good wall see if adjacent cell is -1
                 #if it is look if cell adjacent to that is -1
                 #if it is add to walls
+                print('HERE')
+                wallcheck = []
                 for indexr, row in enumerate(maze): 
                     for indexc, num in enumerate(row):
-                        wallcheck = []
                         if num == 0:
-                            wallcheck.append(indexr,indexc)
+                            addwall = [indexr,indexc]
+                            wallcheck.append(addwall)
+                            print('addwall',addwall)
+                            print('wallcheck',wallcheck)
                 for ele in wallcheck:
                     elenorth = [ele[0]-1, ele[1]]
                     elesouth = [ele[0]+1, ele[1]]
