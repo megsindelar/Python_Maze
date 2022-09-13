@@ -111,8 +111,8 @@ while len(walls) > 0:
 
     while numfree > 1:
         #pick C randomly from the list of walls
-        C = random.randint(0,len(walls)-1)
-        setC = walls[C]
+        C = random.randint(0,len(activewalls)-1)
+        setC = activewalls[C]
         print(setC)
 
         #find A from C
@@ -136,26 +136,85 @@ while len(walls) > 0:
                 A = [setB[0], setB[1]-2]
                 print("A:",A)
 
-        tocheck = [A, setC]
-        print('C:',setC)
-        for spot in tocheck:
-            numfree = 0
-            LoNorth = [spot[0]-1, spot[1]]
-            LoSouth = [spot[0]+1, spot[1]]
-            LoEast = [spot[0], spot[1]+1]
-            LoWest = [spot[0], spot[1]-1]
-            check = [maze[LoNorth[0],LoNorth[1]], maze[LoSouth[0], LoSouth[1]],
-                     maze[LoEast[0], LoEast[1]], maze[LoWest[0], LoWest[1]]]
-            for spot in check:
-                if spot == 0:
+        #set up varibles for A and C to test for open cells
+        numfree = 0
+        Anorth = [A[0]-1, A[1]]
+        Asouth = [A[0]+1, A[1]]
+        Aeast = [A[0], A[1]+1]
+        Awest = [A[0], A[1]-1]
+        acheck = [maze[Anorth[0],Anorth[1]], maze[Asouth[0], Asouth[1]],
+            maze[Aeast[0], Aeast[1]], maze[Awest[0], Awest[1]]]
+
+        Cnorth = [setC[0]-1, setC[1]]
+        Csouth = [setC[0]+1, setC[1]]
+        Ceast = [setC[0], setC[1]+1]
+        Cwest = [setC[0], setC[1]-1]
+        ccheck = [maze[Cnorth[0],Cnorth[1]], maze[Csouth[0], Csouth[1]],
+            maze[Ceast[0], Ceast[1]], maze[Cwest[0], Cwest[1]]]
+
+        #test A for open cells, if more than 2 delete A from walls
+        #and go pick a new C to try again, delete c from activewalls
+        for x, dir in enumerate(acheck):
+            if dir == 0:
+                numfree +=1
+            print("hey",numfree)
+        if numfree > 1:
+            walls.remove(walls[A])
+            activewalls.remove(walls[C])
+            numfree = 2
+            print("hi",numfree)
+        print("here")
+        numfree = 0
+        #if A is good check C, if C is good then set A and C to 0
+        #if C is bad then go pick a new C and remove C from walls and active walls
+        if numfree <= 1:
+            for x, dir in enumerate(ccheck):
+                if dir == 0:
                     numfree +=1
-                if numfree <= 1:
-                    maze[A[0], A[1]] = 0
-                    maze[setC[0], setC[1]] = 0
-                    numfree = 0
-                else:
-                    print(C)
-                    walls.remove(walls[C])
+                print("sup", numfree)
+            print("hello")
+            if numfree <= 1:
+                maze[A[0], A[1]] = 0
+                maze[setC[0], setC[1]] = 0
+                print("ugh", numfree)
+            else:
+                numfree = 2
+                activewalls.remove(walls[C])
+                walls.remove(walls[C])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # tocheck = [A, setC]
+        # print('C:',setC)
+        # for spot in tocheck:
+        #     numfree = 0
+        #     LoNorth = [spot[0]-1, spot[1]]
+        #     LoSouth = [spot[0]+1, spot[1]]
+        #     LoEast = [spot[0], spot[1]+1]
+        #     LoWest = [spot[0], spot[1]-1]
+        #     check = [maze[LoNorth[0],LoNorth[1]], maze[LoSouth[0], LoSouth[1]],
+        #              maze[LoEast[0], LoEast[1]], maze[LoWest[0], LoWest[1]]]
+        #     for spot in check:
+        #         if spot == 0:
+        #             numfree +=1
+        #         if numfree <= 1:
+        #             maze[A[0], A[1]] = 0
+        #             maze[setC[0], setC[1]] = 0
+        #             numfree = 0
+        #         else:
+        #             print(C)
+        #             walls.remove(walls[C])
                 
         print(walls)
     break
