@@ -54,60 +54,81 @@ while len(walls) > 0:
     walls.clear()
     fdirections = ''
 
+    #look at surrounding cells and check if they are -1
+    #if they are add them to get looked at for 2 away
     for x, dir in enumerate(ndn):
-        print(x)
-        print(dir)
-        #add all of the surround cells to walls
         if dir == -1 and x == 0:
-            walls.append(north)
             fdirections += ' fnorth'
-            print('hi')
                     
         if dir == -1 and x == 1:
-            walls.append(south)
             fdirections += ' fsouth'
-            print('hey')
 
 
         if dir == -1 and x == 2:
-            walls.append(east)
             fdirections += ' feast'
-            print('yo')
 
         if dir == -1 and x == 3:
-            walls.append(west)
             fdirections += ' fwest'
-            print('sup')
     print(fdirections)
 
+    #look at the numbers two away and see if they are -1
+    #if they are add their keys to walls
     if 'fnorth' in fdirections:
         fnorth = [setB[0]-2, setB[1]]
-        frows = fnorth[0] 
-        fcols = fnorth[1]
-        if maze[frows, fcols] == -1:
+        nfrows = fnorth[0] 
+        nfcols = fnorth[1]
+        if maze[nfrows, nfcols] == -1:
             walls.append(north)
+
 
     if 'fsouth' in fdirections:
         fsouth = [setB[0]+2, setB[1]]
-        frows = fsouth[0] 
-        fcols = fsouth[1]
-        if maze[frows, fcols] == -1:
-            walls.append(north) 
+        sfrows = fsouth[0] 
+        sfcols = fsouth[1]
+        if maze[sfrows, sfcols] == -1:
+            walls.append(south) 
+
 
     if 'feast' in fdirections:
-        frows = feast[0] 
-        fcols = feast[1]
         feast = [setB[0], setB[1]+2]
-        if maze[frows, fcols] == -1:
-            walls.append(north)
+        efrows = feast[0] 
+        efcols = feast[1]
+        if maze[efrows, efcols] == -1:
+            walls.append(east)
 
     if 'fwest' in fdirections:
         fwest = [setB[0], setB[1]-2]
-        frows = fwest[0] 
-        fcols = fwest[1]
-        if maze[frows, fcols] == -1:
-            walls.append(north)
-
+        wfrows = fwest[0] 
+        wfcols = fwest[1]
+        if maze[wfrows, wfcols] == -1:
+            walls.append(west)
     print(walls)
 
+    #pick C randomly from the list of walls
+    C = random.randint(0,len(walls)-1)
+    setC = walls[C]
+    print(setC)
+
+    #find A from C
+    findA = (np.subtract(setB,setC))
+    if findA[0] != 0:
+        if findA[0] < 0:
+            #south
+            A = [setB[0]+2, setB[1]]
+            print("A:",A)
+        else:
+            #north
+            A = [setB[0]-2, setB[1]]
+            print("A:",A)
+    if findA[1] != 0:
+        if findA[1] < 0:
+            #east
+            A = [setB[0], setB[1]+2]
+            print("A:",A)
+        else:
+            #west
+            A = [setB[0], setB[1]-2]
+            print("A:",A)
+    #maze[setB[0], setB[1]] = 0
+    #print(maze)
     break
