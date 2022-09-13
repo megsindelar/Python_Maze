@@ -17,40 +17,21 @@ import numpy as np
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1]])
+# Wall matrix and wave matrix
+wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, -3, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, -4, -1], [-1, -1, -1, -1, -1, -1]])
 wavemat = np.zeros((6,6))
+wavemat = np.copy(wallmat) # DOES NOT MAKE WAVEMAT A POINTER!
 
-#wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 2, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 3, -1], [-2, -2, -2, -2, -2, -2]])
-#wavemat = np.array([[-2, -2, -2, -2, -2, -2], [-2, 6, 5, 6, -1, -2], [-2, -1, 4, -1, -1, -2], [-2, 4, 3, 2, 1, -2], [-2, 5, -1, 1, 0, -2], [-2, -2, -2, -2, -2, -2]])
-#print(wavemat)
-
-
-
-#robotpos = wallmat[0, 0]
-#robotpos = 2
-
-
-
-#print(wavemat)
-
-#robotpos = [0,0]
-#robotval = 7
 
 #wallmat[robotpos[0],robotpos[1]] = robotval
 print(wallmat)
+print(wavemat)
+
+
+
+
+
+
 
 
 
@@ -157,6 +138,7 @@ def shortest_path():
         """Checking position values"""
         four_square_surroundings()
         ifgoal = check_goal()
+        print(smallest_num)
         if (ifgoal == 1):
             print("Reached goal!")
             reached_goal = 1
@@ -166,6 +148,7 @@ def shortest_path():
             """Check if robot is next to a wall (-1 represents a wall)"""
             check_wall = smallest_num[1]
             c = 1
+            #print(check_wall)
             while check_wall == -1 or check_wall == -2:
                 c+=1
                 check_wall = smallest_num[c]
@@ -173,7 +156,7 @@ def shortest_path():
                     print("Boxed in! No way out!")
                     break
             next_val = check_wall
-            #print(next_val)
+            print(next_val)
 
             if (l == 0):
                 next_ind = []
@@ -210,6 +193,8 @@ def shortest_path():
             """If smallest value is not a wall or robot is not next to the goal, then move to the smallest value cell"""
             four_square_surroundings()
             check_wall = smallest_num[0]
+            print(check_wall)
+            print(lst)
             rob_ind = lst.index(check_wall)
             move_robot(rob_ind)
             next_val = check_wall
@@ -249,9 +234,11 @@ def shortest_path():
     robot_move = wavemat
 
     """Place robot at start"""
-    pos_robot = np.where(wallmat == 2)
+    pos_robot = np.where(wallmat == -3)
+    print(wallmat)
     robotpos_0 = pos_robot[0]
     robotpos_1 = pos_robot[1]
+    print(robotpos_0, robotpos_1)
     global robotpos
     robotpos = [robotpos_0[0], robotpos_1[0]]
     global i
@@ -275,7 +262,7 @@ def shortest_path():
     original_lst = []
 
     """Check if robot is next to the goal (3 represents goal)"""
-    posr = np.where(wallmat == 3)
+    posr = np.where(wallmat == -4)
     posr_0 = posr[0]
     posr_1 = posr[1]
     goal = [posr_0[0], posr_1[0]]
@@ -298,8 +285,6 @@ def shortest_path():
     
 
 
-"""Run Robot Path"""
-shortest_path()
 
 
 
@@ -321,24 +306,18 @@ shortest_path()
 
 
 
-
-
-
-
-
-
-
-
-
+##############################################################
+#    Wavefront planner & Printing maze - Marno & David       #
+##############################################################
 
 
 
 
 ### FUNCTIONS ### 
 
-def update_wallmat_Robotpos():
+#def update_wallmat_Robotpos():
 
-    wallmat[robotPos[0],robotPos[1]] = robotVal # Update wall matrix to display robot current pos
+    #wallmat[robotPos[0],robotPos[1]] = robotVal # Update wall matrix to display robot current pos
 
 
 
@@ -354,8 +333,6 @@ def displayMatrix():
 
 
 
-
-
 def breadth_first_search(): 
 
     wavemat[fringe[0][0], fringe[0][1]] = 1 # Set starting position to 1
@@ -365,19 +342,19 @@ def breadth_first_search():
         # add to wave's fringe, into an array of its indices
         # pushes out wave fringe and removes old visited indices
         # Find children function
-        if wallmat[fringe[0][0]+1, fringe[0][1]] == 0 and wavemat[fringe[0][0]+1, fringe[0][1]] == 0:
+        if wallmat[fringe[0][0]+1, fringe[0][1]] in ([0,-3,-4]) and wavemat[fringe[0][0]+1, fringe[0][1]] in ([0,-3,-4]):
             fringe.append([fringe[0][0]+1, fringe[0][1]])
             wavemat[fringe[0][0]+1, fringe[0][1]] = wavemat[fringe[0][0], fringe[0][1]] + 1
            
-        if wallmat[fringe[0][0]-1, fringe[0][1]] == 0 and wavemat[fringe[0][0]-1, fringe[0][1]] == 0:
+        if wallmat[fringe[0][0]-1, fringe[0][1]] in ([0,-3,-4])  and wavemat[fringe[0][0]-1, fringe[0][1]] in ([0,-3,-4]):
             fringe.append([fringe[0][0]-1, fringe[0][1]])
             wavemat[fringe[0][0]-1, fringe[0][1]] = wavemat[fringe[0][0], fringe[0][1]] + 1
             
-        if wallmat[fringe[0][0], fringe[0][1]+1] == 0 and wavemat[fringe[0][0], fringe[0][1]+1] == 0:
+        if wallmat[fringe[0][0], fringe[0][1]+1] in ([0,-3,-4]) and wavemat[fringe[0][0], fringe[0][1]+1] in ([0,-3,-4]):
             fringe.append([fringe[0][0], fringe[0][1]+1])
             wavemat[fringe[0][0], fringe[0][1]+1] = wavemat[fringe[0][0], fringe[0][1]] + 1
             
-        if wallmat[fringe[0][0], fringe[0][1]-1] == 0 and wavemat[fringe[0][0], fringe[0][1]-1] == 0:
+        if wallmat[fringe[0][0], fringe[0][1]-1] in ([0,-3,-4]) and wavemat[fringe[0][0], fringe[0][1]-1] in ([0,-3,-4]):
             fringe.append([fringe[0][0], fringe[0][1]-1])
             wavemat[fringe[0][0], fringe[0][1]-1] = wavemat[fringe[0][0], fringe[0][1]] + 1
            
@@ -385,16 +362,12 @@ def breadth_first_search():
         visited.insert(0, fringe[0])
         fringe.remove(visited[0])
 
-        displayMatrix()
+        #displayMatrix()
 
 
 
 
 
-# Wall matrix and wave matrix
-wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1], [-1, -1, -1, -1, -1, -1]])
-wavemat = np.zeros((6,6))
-wavemat = np.copy(wallmat) # DOES NOT MAKE WAVEMAT A POINTER!
 
 
 
@@ -420,4 +393,7 @@ visited = []
 # Call search function
 breadth_first_search() 
 
-
+print(wavemat)
+# Run Megs Code
+"""Run Robot Path"""
+shortest_path()
