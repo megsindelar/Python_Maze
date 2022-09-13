@@ -95,20 +95,22 @@ def shortest_path():
         global robotpos
         close = np.subtract(robotpos,goal)
         #print(close)
-        if (abs(close[0]) < 2 and close[1] == 0) or (close[0] == 0 and abs(close[1]) < 2):
+        if (abs(close[0]) == 1 and close[1] == 0) or (close[0] == 0 and abs(close[1]) == 1):
             """If next to goal, move to goal"""
+            print(robotpos)
             robotpos = goal
+            print(robotpos)
             ifgoal = 1
-            print(ifgoal)
+            #print(ifgoal)
             return ifgoal
         else:
             ifgoal = 0
-            print(ifgoal)
+            #print(ifgoal)
             return ifgoal
 
     def four_square_surroundings():
         """Directions robot can move"""
-        global i,j, smallest_num, lst
+        global i,j, smallest_num, lst, original_lst
         north = robot_move[(i+1), j]
         east = robot_move[i, (j+1)]
         south = robot_move[(i-1), j]
@@ -118,13 +120,14 @@ def shortest_path():
 
 
         """Finding the smallest numeric value for robot path"""
-        lst = [north, east, south, west]
+        original_lst = [north, east, south, west]
+        lst = np.copy(original_lst)
         lst_str = [str(x) for x in lst]
         lst.sort()
         lst_str.sort()
         smallest_num = np.copy(lst)
         smallest = np.copy(lst_str)
-        print(smallest_num)
+        #print(smallest_num)
 
 
     def pos_vals_rob(l):
@@ -154,13 +157,14 @@ def shortest_path():
                 next_ind = []
                 index_pos = 0
                 m = 0
-                print(check_wall)
-                for a in lst:
+                #print(check_wall)
+                for a in original_lst:
                     if a == check_wall:
-                        next_index = lst.index(check_wall, index_pos)
+                        next_index = original_lst.index(check_wall, index_pos)
                         next_ind.append(next_index)
                         length = len(next_ind)
-                    
+                #print(next_ind)
+
             """Checking if multiple of the same smallest cell values"""
             if (length>1) & (l == 0):
                 move_robot(next_ind[m])
@@ -182,6 +186,7 @@ def shortest_path():
         
         else:
             """If smallest value is not a wall or robot is not next to the goal, then move to the smallest value cell"""
+            four_square_surroundings()
             check_wall = smallest_num[0]
             rob_ind = lst.index(check_wall)
             move_robot(rob_ind)
@@ -192,12 +197,13 @@ def shortest_path():
                 next_ind = []
                 index_pos = 0
                 m = 0
-                for i in lst:
-                    if check_wall in lst:
-                        next_index = lst.index(check_wall, index_pos)
+                for a in original_lst:
+                    if a == check_wall:
+                        next_index = original_lst.index(check_wall, index_pos)
                         next_ind.append(next_index)
                         length = len(next_ind)
-            
+                
+
             if (length>1) & (l == 0):
                 move_robot(next_ind[m])
                 m+=1
@@ -243,6 +249,8 @@ def shortest_path():
     smallest_num = []
     global lst
     lst = []
+    global original_lst
+    original_lst = []
 
     """Check if robot is next to the goal (3 represents goal)"""
     posr = np.where(wallmat == 3)
@@ -259,8 +267,8 @@ def shortest_path():
     global reached_goal
     reached_goal = 0 
     
-    #while reached_goal == 0 and hitwall == 0:
-    pos_vals_rob(0)
+    while reached_goal == 0 and hitwall == 0:
+        pos_vals_rob(0)
         
 
     
