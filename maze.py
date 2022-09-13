@@ -23,6 +23,8 @@ wavemat = np.zeros((6,6))
 wavemat = np.copy(wallmat) # DOES NOT MAKE WAVEMAT A POINTER!
 
 
+
+
 #wallmat[robotpos[0],robotpos[1]] = robotval
 print(wallmat)
 print(wavemat)
@@ -374,16 +376,19 @@ def breadth_first_search():
 
 ### Robot variables ###
 robotVal = 7 # Robot value for display on wallmat matrix
-Rstartpos = [4,4] # Robot start position
+#Rstartpos = [4,4] # Robot start position
 robotPos = [0,0] # Holds robot position
 # Update Robot start pos
-robotPos[0] = Rstartpos[0]
-robotPos[1] = Rstartpos[1]
+#robotPos[0] = Rstartpos[0]
+#robotPos[1] = Rstartpos[1]
 
+
+Rstartpos = np.where(wallmat == -4) # Serches for 'end' postion -4
+print(Rstartpos[0])
 
 ### Algorithm variables ###
 # Fringe - Contains robot start position at the beginning then after that it has the next nodes to be visited
-fringe = [Rstartpos]  
+fringe = [[Rstartpos[0],Rstartpos[1]]]  
 # Visited - contains the nodes already visited
 visited = []
 
