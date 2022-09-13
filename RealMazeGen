@@ -163,15 +163,14 @@ while len(walls)>0:
                 numfree +=1
 
         if numfree > 1:
-            walls.remove(walls[A])
+            #walls.remove(walls[A])
             walls.remove(walls[C])
             numfree = 2
-
-        numfree = 0
 
         #if A is good check C, if C is good then set A and C to 0
         #if C is bad then go pick a new C and remove C from walls
         if numfree <= 1:
+            numfree = 0
             for x, dir in enumerate(ccheck):
                 if dir == 0:
                     numfree +=1
@@ -183,7 +182,74 @@ while len(walls)>0:
                 #to find a good wall see if adjacent cell is -1
                 #if it is look if cell adjacent to that is -1
                 #if it is add to walls
+                for indexr, row in enumerate(maze): 
+                    for indexc, num in enumerate(row):
+                        wallcheck = []
+                        if num == 0:
+                            wallcheck.append(indexr,indexc)
+                for ele in wallcheck:
+                    elenorth = [ele[0]-1, ele[1]]
+                    elesouth = [ele[0]+1, ele[1]]
+                    eleeast = [ele[0], ele[1]+1]
+                    elewest = [ele[0], ele[1]-1]
+                    elendn = [maze[elenorth[0],elenorth[1]], maze[elesouth[0], elesouth[1]],
+                        maze[eleeast[0], eleeast[1]], maze[elewest[0], elewest[1]]]
+                    directions = [elenorth, elesouth, eleeast, elewest]
 
+                    efnorth = []
+                    efsouth = []
+                    efeast = []
+                    efwest = []
+                        
+                    efdirections = ''
+
+                    #look at surrounding cells and check if they are -1
+                    #if they are add them to get looked at for 2 away
+                    for x, dir in enumerate(elendn):
+                        if dir == -1 and x == 0:
+                            efdirections += ' efnorth'
+                                        
+                        if dir == -1 and x == 1:
+                            efdirections += ' efsouth'
+
+                        if dir == -1 and x == 2:
+                            efdirections += ' efeast'
+
+                        if dir == -1 and x == 3:
+                            efdirections += ' efwest'
+                    print(efdirections)
+
+                    walls.clear()
+
+                    #look at the numbers two away and see if they are -1
+                    #if they are add their keys to walls
+                    if 'efnorth' in efdirections:
+                        efnorth = [ele[0]-2, ele[1]]
+                        enfrows = efnorth[0] 
+                        enfcols = efnorth[1]
+                        if maze[enfrows, enfcols] == -1:
+                            walls.append(elenorth)
+
+                    if 'efsouth' in efdirections:
+                        efsouth = [ele[0]+2, ele[1]]
+                        esfrows = efsouth[0] 
+                        esfcols = efsouth[1]
+                        if maze[sfrows, esfcols] == -1:
+                            walls.append(elesouth) 
+
+                    if 'efeast' in efdirections:
+                        efeast = [ele[0], ele[1]+2]
+                        eefrows = efeast[0] 
+                        eefcols = efeast[1]
+                        if maze[efrows, efcols] == -1:
+                            walls.append(eleeast)
+
+                    if 'efwest' in efdirections:
+                        efwest = [ele[0], ele[1]-2]
+                        ewfrows = efwest[0] 
+                        ewfcols = efwest[1]
+                        if maze[ewfrows, ewfcols] == -1:
+                            walls.append(elewest)
             else:
                 numfree = 2
                 walls.remove(walls[C])
