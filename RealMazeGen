@@ -3,8 +3,8 @@ import numpy as np
 import random
 
 #set the size of the playable matrix
-rows = 4
-columns = 4
+rows = 10
+columns = 10
 
 #create a matrix of the specified size then fill with -1's
 maze = np.zeros((rows, columns))
@@ -157,68 +157,32 @@ while len(walls) > 0:
         for x, dir in enumerate(acheck):
             if dir == 0:
                 numfree +=1
-            print("hey",numfree)
+
         if numfree > 1:
             walls.remove(walls[A])
             activewalls.remove(walls[C])
             numfree = 2
-            print("hi",numfree)
-        print("here")
+
         numfree = 0
+
         #if A is good check C, if C is good then set A and C to 0
         #if C is bad then go pick a new C and remove C from walls and active walls
         if numfree <= 1:
             for x, dir in enumerate(ccheck):
                 if dir == 0:
                     numfree +=1
-                print("sup", numfree)
-            print("hello")
+
             if numfree <= 1:
                 maze[A[0], A[1]] = 0
                 maze[setC[0], setC[1]] = 0
-                print("ugh", numfree)
+
             else:
                 numfree = 2
                 activewalls.remove(walls[C])
                 walls.remove(walls[C])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # tocheck = [A, setC]
-        # print('C:',setC)
-        # for spot in tocheck:
-        #     numfree = 0
-        #     LoNorth = [spot[0]-1, spot[1]]
-        #     LoSouth = [spot[0]+1, spot[1]]
-        #     LoEast = [spot[0], spot[1]+1]
-        #     LoWest = [spot[0], spot[1]-1]
-        #     check = [maze[LoNorth[0],LoNorth[1]], maze[LoSouth[0], LoSouth[1]],
-        #              maze[LoEast[0], LoEast[1]], maze[LoWest[0], LoWest[1]]]
-        #     for spot in check:
-        #         if spot == 0:
-        #             numfree +=1
-        #         if numfree <= 1:
-        #             maze[A[0], A[1]] = 0
-        #             maze[setC[0], setC[1]] = 0
-        #             numfree = 0
-        #         else:
-        #             print(C)
-        #             walls.remove(walls[C])
-                
-        print(walls)
-    break
-
+        print("walls",walls)
+        print("activewalls",activewalls)
 
     print(maze)
   
