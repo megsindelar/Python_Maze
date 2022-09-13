@@ -32,14 +32,14 @@ while len(walls) > 0:
     #pick B from random index in walls and set to 0
     B = random.randint(0,len(walls)-1)
     setB = walls[B]
+    print(setB[0])
     maze[setB[0], setB[1]] = 0
     print(maze)
 
     #check the nextdoor neighbors (ndn) and 
     #the next nextdoor neighbots (nndn) to see if they are 1's
-    print(setB[1])
-    north = [setB[0]+1, setB[1]]
-    south = [setB[0]-1, setB[1]]
+    north = [setB[0]-1, setB[1]]
+    south = [setB[0]+1, setB[1]]
     east = [setB[0], setB[1]+1]
     west = [setB[0], setB[1]-1]
     ndn = [maze[north[0],north[1]], maze[south[0], south[1]],
@@ -51,37 +51,63 @@ while len(walls) > 0:
     feast = []
     fwest = []
     
-    for x, dir in enumerate(ndn):
-        #add all of the surround cells to walls
-            for x, dir in enumerate(ndn):
-                fdirections = []
-                if dir == -1 and x == 0:
-                    walls.append(north)
-                    fdirections.append(fnorth)
-                if dir == -1 and x == 1:
-                    walls.append(south)
-                    fdirections.append(fsouth)
-                if dir == -1 and x == 2:
-                    walls.append(east)
-                    fdirections.append(feast)
-                if dir == -1 and x == 3:
-                    walls.append(west)
-                    fdirections.append(fwest)
+    walls.clear()
+    fdirections = ''
 
-    if fnorth in fdirections:
-        fnorth = [setB[0]+2, setB[1]]
-        print(fnorth)
-    if fsouth in fdirections:
-        fsouth = [setB[0]-2, setB[1]]
-        print(fsouth)
-    if feast in fdirections:
+    for x, dir in enumerate(ndn):
+        print(x)
+        print(dir)
+        #add all of the surround cells to walls
+        if dir == -1 and x == 0:
+            walls.append(north)
+            fdirections += ' fnorth'
+            print('hi')
+                    
+        if dir == -1 and x == 1:
+            walls.append(south)
+            fdirections += ' fsouth'
+            print('hey')
+
+
+        if dir == -1 and x == 2:
+            walls.append(east)
+            fdirections += ' feast'
+            print('yo')
+
+        if dir == -1 and x == 3:
+            walls.append(west)
+            fdirections += ' fwest'
+            print('sup')
+    print(fdirections)
+
+    if 'fnorth' in fdirections:
+        fnorth = [setB[0]-2, setB[1]]
+        frows = fnorth[0] 
+        fcols = fnorth[1]
+        if maze[frows, fcols] == -1:
+            walls.append(north)
+
+    if 'fsouth' in fdirections:
+        fsouth = [setB[0]+2, setB[1]]
+        frows = fsouth[0] 
+        fcols = fsouth[1]
+        if maze[frows, fcols] == -1:
+            walls.append(north) 
+
+    if 'feast' in fdirections:
+        frows = feast[0] 
+        fcols = feast[1]
         feast = [setB[0], setB[1]+2]
-    if fwest in fdirections:
+        if maze[frows, fcols] == -1:
+            walls.append(north)
+
+    if 'fwest' in fdirections:
         fwest = [setB[0], setB[1]-2]
-    # fsouth = [indexr-2, indexc]
-    # feast = [indexr, indexc+2]
-    # fwest = [indexr, indexc-2]
-    # nsdn = [maze[fnorth[0],fnorth[1]], maze[fsouth[0], fsouth[1]],
-    #        maze[feast[0], feast[1]], maze[fwest[0], fwest[1]]]
+        frows = fwest[0] 
+        fcols = fwest[1]
+        if maze[frows, fcols] == -1:
+            walls.append(north)
+
+    print(walls)
 
     break
