@@ -1,9 +1,12 @@
 from copy import deepcopy
 from cgitb import small
 from operator import ne
+from os import lstat
 import re
 from shutil import move
+from signal import pause
 from tabnanny import check
+from turtle import delay
 import wave
 import numpy as np
 
@@ -30,9 +33,9 @@ import numpy as np
 wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 0, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 0, -1]])
 wavemat = np.zeros((6,6))
 
-wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 2, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 3, -1], [-2, -2, -2, -2, -2, -2]])
-wavemat = np.array([[-2, -2, -2, -2, -2, -2], [-2, 6, 5, 6, -1, -2], [-2, -1, 4, -1, -1, -2], [-2, 4, 3, 2, 1, -2], [-2, 5, -1, 1, 0, -2], [-2, -2, -2, -2, -2, -2]])
-print(wavemat)
+#wallmat = np.array([[-1, -1, -1, -1, -1, -1], [-1, 0, 2, 0, -1, -1], [-1, -1, 0, -1, -1, -1], [-1, 0, 0, 0, 0, -1], [-1, 0, -1, 0, 3, -1], [-2, -2, -2, -2, -2, -2]])
+#wavemat = np.array([[-2, -2, -2, -2, -2, -2], [-2, 6, 5, 6, -1, -2], [-2, -1, 4, -1, -1, -2], [-2, 4, 3, 2, 1, -2], [-2, 5, -1, 1, 0, -2], [-2, -2, -2, -2, -2, -2]])
+#print(wavemat)
 
 
 
@@ -64,8 +67,11 @@ def shortest_path():
     def move_robot(ind):
         global i,j, robotpos
         print(robotpos)
-        print(i)
+        #print(i)
         #print(j)
+        if i == 5 or j == 5:
+            hit_wall()
+
         if ind == 0:
             """Robot position movement north"""
             robotpos = [(i+1),j]
@@ -82,6 +88,11 @@ def shortest_path():
             """Robot position movement west"""
             robotpos = [i, (j-1)]
             j-=1
+
+    def hit_wall():
+        global hitwall
+        print("Hit wall")
+        hitwall = 1
 
     def reverse_robot(ind):
         global i,j
@@ -105,22 +116,48 @@ def shortest_path():
     def check_goal():
         global robotpos
         close = np.subtract(robotpos,goal)
-        if (abs(close[0] < 2) and close[1] == 0) or (close[0] == 0 and abs(close[1] < 2)):
+        #print(close)
+        if (abs(close[0]) < 2 and close[1] == 0) or (close[0] == 0 and abs(close[1]) < 2):
             """If next to goal, move to goal"""
             robotpos = goal
             ifgoal = 1
+            print(ifgoal)
             return ifgoal
         else:
             ifgoal = 0
+            print(ifgoal)
             return ifgoal
 
+    def four_square_surroundings():
+        """Directions robot can move"""
+        global i,j, smallest_num, lst
+        north = robot_move[(i+1), j]
+        east = robot_move[i, (j+1)]
+        south = robot_move[(i-1), j]
+        west = robot_move[i, (j-1)]
+        #print(i,j)
+        #print(south)
+
+
+        """Finding the smallest numeric value for robot path"""
+        lst = [north, east, south, west]
+        lst_str = [str(x) for x in lst]
+        lst.sort()
+        lst_str.sort()
+        smallest_num = np.copy(lst)
+        smallest = np.copy(lst_str)
+        print(smallest_num)
+
+
     def pos_vals_rob(l):
-        global length, last_val, next_val, next_ind, reached_goal
+        global length, last_val, next_val, next_ind, reached_goal, smallest_num, lst, m
         """Checking position values"""
+        four_square_surroundings()
         ifgoal = check_goal()
         if (ifgoal == 1):
             print("Reached goal!")
             reached_goal = 1
+            return reached_goal
 
         elif (smallest_num[0] == -1) or (smallest_num[0] == -2):
             """Check if robot is next to a wall (-1 represents a wall)"""
@@ -133,13 +170,15 @@ def shortest_path():
                     print("Boxed in! No way out!")
                     break
             next_val = check_wall
+            #print(next_val)
 
             if (l == 0):
                 next_ind = []
                 index_pos = 0
                 m = 0
+                print(check_wall)
                 for a in lst:
-                    if check_wall in lst:
+                    if a == check_wall:
                         next_index = lst.index(check_wall, index_pos)
                         next_ind.append(next_index)
                         length = len(next_ind)
@@ -213,7 +252,7 @@ def shortest_path():
     global j
     i = robotpos[0]
     j = robotpos[1]
-    print(i)
+    #print(i)
 
     global length
     length = 0
@@ -222,6 +261,10 @@ def shortest_path():
     last_val = 0
     global next_ind
     next_ind = []
+    global smallest_num
+    smallest_num = []
+    global lst
+    lst = []
 
     """Check if robot is next to the goal (3 represents goal)"""
     posr = np.where(wallmat == 3)
@@ -229,28 +272,20 @@ def shortest_path():
     posr_1 = posr[1]
     goal = [posr_0[0], posr_1[0]]
 
-    """Directions robot can move"""
-    north = robot_move[(i+1), j]
-    east = robot_move[i, (j+1)]
-    south = robot_move[(i-1), j]
-    west = robot_move[i, (j-1)]
-
-
-    """Finding the smallest numeric value for robot path"""
-    lst = [north, east, south, west]
-    #lst = [5,2,7,4]
-    lst_str = [str(x) for x in lst]
-    lst.sort()
-    lst_str.sort()
-    smallest_num = np.copy(lst)
-    smallest = np.copy(lst_str)
-    #print(smallest_num)
 
 
     pos_vals_rob(0)
+    global m
+    m = 0
+    
+    global hitwall
+    hitwall = 0
     global reached_goal
     reached_goal = 0 
+    
+    #while reached_goal == 0 and hitwall == 0:
     pos_vals_rob(0)
+        
 
     
 
