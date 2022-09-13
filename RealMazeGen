@@ -10,10 +10,6 @@ columns = 4
 maze = np.zeros((rows, columns))
 maze.fill(-1)
 
-#pick a start point denoted by 2
-#startc = random.randint(0,columns-1)
-#maze[0,startc] = 2
-
 #add padding around the maze :)
 maze = np.pad(maze, pad_width=1, mode='constant', constant_values=-2)
 print(maze)
@@ -26,7 +22,7 @@ for indexr, row in enumerate(maze):
             if maze[indexr, indexc] != -2:
                 wall = [indexr, indexc]
                 walls.append(wall)
-
+print(walls)
 
 while len(walls) > 0:
     #pick B from random index in walls and set to 0
@@ -35,9 +31,11 @@ while len(walls) > 0:
     print(setB[0])
     maze[setB[0], setB[1]] = 0
     print(maze)
+    #remove this B from walls since its been used
+    walls.remove(walls[B])
 
     #check the nextdoor neighbors (ndn) and 
-    #the next nextdoor neighbots (nndn) to see if they are 1's
+    #the next nextdoor neighbots (nndn) to see if they are -1's
     north = [setB[0]-1, setB[1]]
     south = [setB[0]+1, setB[1]]
     east = [setB[0], setB[1]+1]
@@ -51,7 +49,7 @@ while len(walls) > 0:
     feast = []
     fwest = []
     
-    walls.clear()
+    activewalls = []
     fdirections = ''
 
     #look at surrounding cells and check if they are -1
@@ -62,7 +60,6 @@ while len(walls) > 0:
                     
         if dir == -1 and x == 1:
             fdirections += ' fsouth'
-
 
         if dir == -1 and x == 2:
             fdirections += ' feast'
@@ -78,57 +75,91 @@ while len(walls) > 0:
         nfrows = fnorth[0] 
         nfcols = fnorth[1]
         if maze[nfrows, nfcols] == -1:
-            walls.append(north)
-
+            activewalls.append(north)
+        else:
+            walls.remove(north) 
 
     if 'fsouth' in fdirections:
         fsouth = [setB[0]+2, setB[1]]
         sfrows = fsouth[0] 
         sfcols = fsouth[1]
         if maze[sfrows, sfcols] == -1:
-            walls.append(south) 
-
+            activewalls.append(south) 
+        else:
+            walls.remove(south) 
 
     if 'feast' in fdirections:
         feast = [setB[0], setB[1]+2]
         efrows = feast[0] 
         efcols = feast[1]
         if maze[efrows, efcols] == -1:
-            walls.append(east)
+            activewalls.append(east)
+        else:
+            walls.remove(east) 
 
     if 'fwest' in fdirections:
         fwest = [setB[0], setB[1]-2]
         wfrows = fwest[0] 
         wfcols = fwest[1]
         if maze[wfrows, wfcols] == -1:
-            walls.append(west)
+            activewalls.append(west)
+        else:
+            walls.remove(west) 
     print(walls)
+    
+    numfree = 2
 
-    #pick C randomly from the list of walls
-    C = random.randint(0,len(walls)-1)
-    setC = walls[C]
-    print(setC)
+    while numfree > 1:
+        #pick C randomly from the list of walls
+        C = random.randint(0,len(walls)-1)
+        setC = walls[C]
+        print(setC)
 
-    #find A from C
-    findA = (np.subtract(setB,setC))
-    if findA[0] != 0:
-        if findA[0] < 0:
-            #south
-            A = [setB[0]+2, setB[1]]
-            print("A:",A)
-        else:
-            #north
-            A = [setB[0]-2, setB[1]]
-            print("A:",A)
-    if findA[1] != 0:
-        if findA[1] < 0:
-            #east
-            A = [setB[0], setB[1]+2]
-            print("A:",A)
-        else:
-            #west
-            A = [setB[0], setB[1]-2]
-            print("A:",A)
-    #maze[setB[0], setB[1]] = 0
-    #print(maze)
+        #find A from C
+        findA = (np.subtract(setB,setC))
+        if findA[0] != 0:
+            if findA[0] < 0:
+                #south
+                A = [setB[0]+2, setB[1]]
+                print("A:",A)
+            else:
+                #north
+                A = [setB[0]-2, setB[1]]
+                print("A:",A)
+        if findA[1] != 0:
+            if findA[1] < 0:
+                #east
+                A = [setB[0], setB[1]+2]
+                print("A:",A)
+            else:
+                #west
+                A = [setB[0], setB[1]-2]
+                print("A:",A)
+
+        tocheck = [A, setC]
+        print('C:',setC)
+        for spot in tocheck:
+            numfree = 0
+            LoNorth = [spot[0]-1, spot[1]]
+            LoSouth = [spot[0]+1, spot[1]]
+            LoEast = [spot[0], spot[1]+1]
+            LoWest = [spot[0], spot[1]-1]
+            check = [maze[LoNorth[0],LoNorth[1]], maze[LoSouth[0], LoSouth[1]],
+                     maze[LoEast[0], LoEast[1]], maze[LoWest[0], LoWest[1]]]
+            for spot in check:
+                if spot == 0:
+                    numfree +=1
+                if numfree <= 1:
+                    maze[A[0], A[1]] = 0
+                    maze[setC[0], setC[1]] = 0
+                    numfree = 0
+                else:
+                    print(C)
+                    walls.remove(walls[C])
+                
+        print(walls)
     break
+
+
+    print(maze)
+  
