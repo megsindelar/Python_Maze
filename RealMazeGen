@@ -1,0 +1,87 @@
+from turtle import fd
+import numpy as np
+import random
+
+#set the size of the playable matrix
+rows = 4
+columns = 4
+
+#create a matrix of the specified size then fill with -1's
+maze = np.zeros((rows, columns))
+maze.fill(-1)
+
+#pick a start point denoted by 2
+#startc = random.randint(0,columns-1)
+#maze[0,startc] = 2
+
+#add padding around the maze :)
+maze = np.pad(maze, pad_width=1, mode='constant', constant_values=-2)
+print(maze)
+
+walls = []
+
+#put all legal indexes into walls
+for indexr, row in enumerate(maze): 
+        for indexc, num in enumerate(row):
+            if maze[indexr, indexc] != -2:
+                wall = [indexr, indexc]
+                walls.append(wall)
+
+
+while len(walls) > 0:
+    #pick B from random index in walls and set to 0
+    B = random.randint(0,len(walls)-1)
+    setB = walls[B]
+    maze[setB[0], setB[1]] = 0
+    print(maze)
+
+    #check the nextdoor neighbors (ndn) and 
+    #the next nextdoor neighbots (nndn) to see if they are 1's
+    print(setB[1])
+    north = [setB[0]+1, setB[1]]
+    south = [setB[0]-1, setB[1]]
+    east = [setB[0], setB[1]+1]
+    west = [setB[0], setB[1]-1]
+    ndn = [maze[north[0],north[1]], maze[south[0], south[1]],
+           maze[east[0], east[1]], maze[west[0], west[1]]]
+    directions = [north, south, east, west]
+
+    fnorth = []
+    fsouth = []
+    feast = []
+    fwest = []
+    
+    for x, dir in enumerate(ndn):
+        #add all of the surround cells to walls
+            for x, dir in enumerate(ndn):
+                fdirections = []
+                if dir == -1 and x == 0:
+                    walls.append(north)
+                    fdirections.append(fnorth)
+                if dir == -1 and x == 1:
+                    walls.append(south)
+                    fdirections.append(fsouth)
+                if dir == -1 and x == 2:
+                    walls.append(east)
+                    fdirections.append(feast)
+                if dir == -1 and x == 3:
+                    walls.append(west)
+                    fdirections.append(fwest)
+
+    if fnorth in fdirections:
+        fnorth = [setB[0]+2, setB[1]]
+        print(fnorth)
+    if fsouth in fdirections:
+        fsouth = [setB[0]-2, setB[1]]
+        print(fsouth)
+    if feast in fdirections:
+        feast = [setB[0], setB[1]+2]
+    if fwest in fdirections:
+        fwest = [setB[0], setB[1]-2]
+    # fsouth = [indexr-2, indexc]
+    # feast = [indexr, indexc+2]
+    # fwest = [indexr, indexc-2]
+    # nsdn = [maze[fnorth[0],fnorth[1]], maze[fsouth[0], fsouth[1]],
+    #        maze[feast[0], feast[1]], maze[fwest[0], fwest[1]]]
+
+    break
