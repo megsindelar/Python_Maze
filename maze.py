@@ -397,6 +397,8 @@ wavemat = np.zeros((6,6))
 wavemat = np.copy(wallmat) # DOES NOT MAKE WAVEMAT A POINTER!
 
 
+
+
 ### Robot variables ###
 robotVal = 7 # Robot value for display on wallmat matrix
 Rstartpos = [4,4] # Robot start position
