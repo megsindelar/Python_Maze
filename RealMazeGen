@@ -24,96 +24,107 @@ for indexr, row in enumerate(maze):
                 walls.append(wall)
 print(walls)
 
-while len(walls) > 0:
-    #pick B from random index in walls and set to 0
-    B = random.randint(0,len(walls)-1)
-    setB = walls[B]
-    print(setB[0])
-    maze[setB[0], setB[1]] = 0
-    print(maze)
-    #remove this B from walls since its been used
-    walls.remove(walls[B])
+#pick B from random index in walls and set to 0
+B = random.randint(0,len(walls)-1)
+setB = walls[B]
+print(setB[0])
+maze[setB[0], setB[1]] = 0
+print(maze)
 
-    #check the nextdoor neighbors (ndn) and 
-    #the next nextdoor neighbots (nndn) to see if they are -1's
-    north = [setB[0]-1, setB[1]]
-    south = [setB[0]+1, setB[1]]
-    east = [setB[0], setB[1]+1]
-    west = [setB[0], setB[1]-1]
-    ndn = [maze[north[0],north[1]], maze[south[0], south[1]],
-           maze[east[0], east[1]], maze[west[0], west[1]]]
-    directions = [north, south, east, west]
+#check the nextdoor neighbors (ndn) and 
+#the next nextdoor neighbots (nndn) to see if they are -1's
+north = [setB[0]-1, setB[1]]
+south = [setB[0]+1, setB[1]]
+east = [setB[0], setB[1]+1]
+west = [setB[0], setB[1]-1]
+ndn = [maze[north[0],north[1]], maze[south[0], south[1]],
+       maze[east[0], east[1]], maze[west[0], west[1]]]
+directions = [north, south, east, west]
 
-    fnorth = []
-    fsouth = []
-    feast = []
-    fwest = []
+fnorth = []
+fsouth = []
+feast = []
+fwest = []
     
-    activewalls = []
-    fdirections = ''
+fdirections = ''
 
-    #look at surrounding cells and check if they are -1
-    #if they are add them to get looked at for 2 away
-    for x, dir in enumerate(ndn):
-        if dir == -1 and x == 0:
-            fdirections += ' fnorth'
+#look at surrounding cells and check if they are -1
+#if they are add them to get looked at for 2 away
+for x, dir in enumerate(ndn):
+    if dir == -1 and x == 0:
+        fdirections += ' fnorth'
                     
-        if dir == -1 and x == 1:
-            fdirections += ' fsouth'
+    if dir == -1 and x == 1:
+        fdirections += ' fsouth'
 
-        if dir == -1 and x == 2:
-            fdirections += ' feast'
+    if dir == -1 and x == 2:
+        fdirections += ' feast'
 
-        if dir == -1 and x == 3:
-            fdirections += ' fwest'
-    print(fdirections)
+    if dir == -1 and x == 3:
+        fdirections += ' fwest'
+print(fdirections)
 
-    #look at the numbers two away and see if they are -1
-    #if they are add their keys to walls
-    if 'fnorth' in fdirections:
-        fnorth = [setB[0]-2, setB[1]]
-        nfrows = fnorth[0] 
-        nfcols = fnorth[1]
-        if maze[nfrows, nfcols] == -1:
-            activewalls.append(north)
-        else:
-            walls.remove(north) 
+walls.clear()
 
-    if 'fsouth' in fdirections:
-        fsouth = [setB[0]+2, setB[1]]
-        sfrows = fsouth[0] 
-        sfcols = fsouth[1]
-        if maze[sfrows, sfcols] == -1:
-            activewalls.append(south) 
-        else:
-            walls.remove(south) 
+#look at the numbers two away and see if they are -1
+#if they are add their keys to walls
+if 'fnorth' in fdirections:
+    fnorth = [setB[0]-2, setB[1]]
+    nfrows = fnorth[0] 
+    nfcols = fnorth[1]
+    if maze[nfrows, nfcols] == -1:
+        walls.append(north)
 
-    if 'feast' in fdirections:
-        feast = [setB[0], setB[1]+2]
-        efrows = feast[0] 
-        efcols = feast[1]
-        if maze[efrows, efcols] == -1:
-            activewalls.append(east)
-        else:
-            walls.remove(east) 
+if 'fsouth' in fdirections:
+    fsouth = [setB[0]+2, setB[1]]
+    sfrows = fsouth[0] 
+    sfcols = fsouth[1]
+    if maze[sfrows, sfcols] == -1:
+        walls.append(south) 
 
-    if 'fwest' in fdirections:
-        fwest = [setB[0], setB[1]-2]
-        wfrows = fwest[0] 
-        wfcols = fwest[1]
-        if maze[wfrows, wfcols] == -1:
-            activewalls.append(west)
-        else:
-            walls.remove(west) 
-    print(walls)
+if 'feast' in fdirections:
+    feast = [setB[0], setB[1]+2]
+    efrows = feast[0] 
+    efcols = feast[1]
+    if maze[efrows, efcols] == -1:
+        walls.append(east)
+
+if 'fwest' in fdirections:
+    fwest = [setB[0], setB[1]-2]
+    wfrows = fwest[0] 
+    wfcols = fwest[1]
+    if maze[wfrows, wfcols] == -1:
+        walls.append(west)
+
+
+print(walls)
     
-    numfree = 2
 
+while len(walls)>0:
+    numfree = 2
     while numfree > 1:
         #pick C randomly from the list of walls
-        C = random.randint(0,len(activewalls)-1)
-        setC = activewalls[C]
+        C = random.randint(0,len(walls)-1)
+        setC = walls[C]
         print(setC)
+
+        #find B relative to C
+        Cnorth = [setC[0]-1, setC[1]]
+        Csouth = [setC[0]+1, setC[1]]
+        Ceast = [setC[0], setC[1]+1]
+        Cwest = [setC[0], setC[1]-1]
+        ccheck = [maze[Cnorth[0],Cnorth[1]], maze[Csouth[0], Csouth[1]],
+                  maze[Ceast[0], Ceast[1]], maze[Cwest[0], Cwest[1]]]
+        #look for 0's around 
+        for x, dir in enumerate(ccheck):
+                if dir == 0 and x ==0:
+                    setB = Cnorth
+                if dir == 0 and x ==1:
+                    setB = Csouth
+                if dir == 0 and x ==2:
+                    setB = Ceast
+                if dir == 0 and x ==3:
+                    setB = Cwest  
 
         #find A from C
         findA = (np.subtract(setB,setC))
@@ -143,30 +154,23 @@ while len(walls) > 0:
         Aeast = [A[0], A[1]+1]
         Awest = [A[0], A[1]-1]
         acheck = [maze[Anorth[0],Anorth[1]], maze[Asouth[0], Asouth[1]],
-            maze[Aeast[0], Aeast[1]], maze[Awest[0], Awest[1]]]
-
-        Cnorth = [setC[0]-1, setC[1]]
-        Csouth = [setC[0]+1, setC[1]]
-        Ceast = [setC[0], setC[1]+1]
-        Cwest = [setC[0], setC[1]-1]
-        ccheck = [maze[Cnorth[0],Cnorth[1]], maze[Csouth[0], Csouth[1]],
-            maze[Ceast[0], Ceast[1]], maze[Cwest[0], Cwest[1]]]
+                  maze[Aeast[0], Aeast[1]], maze[Awest[0], Awest[1]]]
 
         #test A for open cells, if more than 2 delete A from walls
-        #and go pick a new C to try again, delete c from activewalls
+        #and go pick a new C to try again, delete c from walls
         for x, dir in enumerate(acheck):
             if dir == 0:
                 numfree +=1
 
         if numfree > 1:
             walls.remove(walls[A])
-            activewalls.remove(walls[C])
+            walls.remove(walls[C])
             numfree = 2
 
         numfree = 0
 
         #if A is good check C, if C is good then set A and C to 0
-        #if C is bad then go pick a new C and remove C from walls and active walls
+        #if C is bad then go pick a new C and remove C from walls
         if numfree <= 1:
             for x, dir in enumerate(ccheck):
                 if dir == 0:
@@ -175,14 +179,16 @@ while len(walls) > 0:
             if numfree <= 1:
                 maze[A[0], A[1]] = 0
                 maze[setC[0], setC[1]] = 0
+                #look at each 0 cell and find walls that are good from it, add them to walls
+                #to find a good wall see if adjacent cell is -1
+                #if it is look if cell adjacent to that is -1
+                #if it is add to walls
 
             else:
                 numfree = 2
-                activewalls.remove(walls[C])
                 walls.remove(walls[C])
 
         print("walls",walls)
-        print("activewalls",activewalls)
 
     print(maze)
   
