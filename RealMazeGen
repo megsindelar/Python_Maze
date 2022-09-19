@@ -56,14 +56,12 @@ setB = initalwalls[B]
 maze[setB[0], setB[1]] = 0
 print(maze)
 
+#find the walls of point B
 findwalls(setB)
-print(walls)
-print('walls!',walls)
 badwalls = []
 
 while len(walls)>0:
     #numfree = 2
-    print("hi", walls)
     #while numfree > 1:
         #pick C randomly from the list of walls
     C = random.randint(0,len(walls)-1)
@@ -87,39 +85,10 @@ while len(walls)>0:
                 setB = Ceast
             if dir == 0 and x ==3:
                 setB = Cwest  
-
-    #find A from C
-    findA = (np.subtract(setB,setC))
-    if findA[0] != 0:
-        if findA[0] < 0:
-            #south
-            A = [setB[0]+2, setB[1]]
-            print("A:",A)
-        else:
-            #north
-            A = [setB[0]-2, setB[1]]
-            print("A:",A)
-    if findA[1] != 0:
-        if findA[1] < 0:
-            #east
-            A = [setB[0], setB[1]+2]
-            print("A:",A)
-        else:
-            #west
-            A = [setB[0], setB[1]-2]
-            print("A:",A)
-
-    #set up varibles for A and C to test for open cells
-    numfree = 0
-    Anorth = [A[0]-1, A[1]]
-    Asouth = [A[0]+1, A[1]]
-    Aeast = [A[0], A[1]+1]
-    Awest = [A[0], A[1]-1]
-    acheck = [maze[Anorth[0],Anorth[1]], maze[Asouth[0], Asouth[1]],
-            maze[Aeast[0], Aeast[1]], maze[Awest[0], Awest[1]]]
-
+    
     #test A for open cells, if more than 2 delete C from walls
     #and go pick a new C to try again, delete c from walls
+    numfree = 0
     for x, dir in enumerate(ccheck):
         if dir == 0:
             numfree +=1
@@ -128,47 +97,74 @@ while len(walls)>0:
         badwalls.append(walls[C])
         walls.remove(walls[C])
 
-    #if C is good check A, if A is good then set A and C to 0
-    #if A is bad then go pick a new C and remove C from walls
-    if numfree <= 1:
-        #numfree = 0
-        for x, dir in enumerate(acheck):
-            if dir == 0:
-                numfree +=1
+    else:
+        #find A from C
+        findA = (np.subtract(setB,setC))
+        if findA[0] != 0:
+            if findA[0] < 0:
+                #south
+                A = [setB[0]+2, setB[1]]
+            else:
+                #north
+                A = [setB[0]-2, setB[1]]
+        if findA[1] != 0:
+            if findA[1] < 0:
+                #east
+                A = [setB[0], setB[1]+2]
+            else:
+                #west
+                A = [setB[0], setB[1]-2]
+        
 
+
+        #set up varibles for A and C to test for open cells
+        Anorth = [A[0]-1, A[1]]
+        Asouth = [A[0]+1, A[1]]
+        Aeast = [A[0], A[1]+1]
+        Awest = [A[0], A[1]-1]
+        acheck = [maze[Anorth[0],Anorth[1]], maze[Asouth[0], Asouth[1]],
+                maze[Aeast[0], Aeast[1]], maze[Awest[0], Awest[1]]]
+
+
+        #if C is good check A, if A is good then set A and C to 0
+        #if A is bad then go pick a new C and remove C from walls
         if numfree <= 1:
-            maze[A[0], A[1]] = 0
-            maze[setC[0], setC[1]] = 0
-            #look at each 0 cell and find walls that are good from it, add them to walls
-            #to find a good wall see if adjacent cell is -1
-            #if it is look if cell adjacent to that is -1
-            #if it is add to walls
-            print('HERE')
-            wallcheck = []
-            #create a list of cells that = 0, each of these should be checked for possible walls
-            for indexr, row in enumerate(maze): 
-                for indexc, num in enumerate(row):
-                    if num == 0:
-                        addwall = [indexr,indexc]
-                        wallcheck.append(addwall)
-                        #print('addwall',addwall)
-                        print('wallcheck',wallcheck)
-            #check each 0 cell for walls and add them to the wall list
-            for ele in wallcheck:
-                findwalls(ele)
-            wallcheck.clear()
-            #remove all bad walls from the wall list 
-            for wall in badwalls:
-                try:
-                    walls.remove(wall)
-                except:
-                    pass
-            # addwall.clear
-        else:
-            print("NO HERE")
-            numfree = 2
-            badwalls.append(walls[C])
-            walls.remove(walls[C])
+            #numfree = 0
+            for x, dir in enumerate(acheck):
+                if dir == 0:
+                    numfree +=1
+
+            if numfree <= 1:
+                maze[A[0], A[1]] = 0
+                maze[setC[0], setC[1]] = 0
+                #look at each 0 cell and find walls that are good from it, add them to walls
+                #to find a good wall see if adjacent cell is -1
+                #if it is look if cell adjacent to that is -1
+                #if it is add to walls
+                wallcheck = []
+                #create a list of cells that = 0, each of these should be checked for possible walls
+                for indexr, row in enumerate(maze): 
+                    for indexc, num in enumerate(row):
+                        if num == 0:
+                            addwall = [indexr,indexc]
+                            wallcheck.append(addwall)
+                            #print('addwall',addwall)
+                            print('wallcheck',wallcheck)
+                #check each 0 cell for walls and add them to the wall list
+                for ele in wallcheck:
+                    findwalls(ele)
+                wallcheck.clear()
+                #remove all bad walls from the wall list 
+                for wall in badwalls:
+                    try:
+                        walls.remove(wall)
+                    except:
+                        pass
+                # addwall.clear
+            else:
+                numfree = 2
+                badwalls.append(walls[C])
+                walls.remove(walls[C])
 
         #print("walls",walls)
 
